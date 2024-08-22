@@ -1,0 +1,33 @@
+version: "1"
+
+package:
+  id: io.github.qide
+  name: qide
+  version: 0.0.0.1
+  kind: app
+  description: |
+    The Quake Mod IDE
+
+command:
+  - /opt/apps/io.github.qide/files/bin/qide
+
+base: org.deepin.foundation/23.0.0
+runtime: org.deepin.Runtime/23.0.1
+
+sources:
+  - kind: git
+    url: https://github.com/RamblingMadMan/qide.git
+    version: master
+    commit: 89dfe7fa5c12f2ef9774b50c17d3cb40af7b8c35
+
+build: |
+  #bash ./install_dep linglong/sources $PREFIX
+  cd /project/linglong/sources/qide.git
+  cd deps/rapidfuzz-cpp
+  git apply ../../../../../0001-install.patch
+  cd /project/linglong/sources/qide.git
+  mkdir build
+  cd build
+  cmake .. \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX}
+  cmake --build . --target install -j$(nproc --all)
